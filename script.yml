@@ -1,0 +1,19 @@
+---
+- name: Copy and execute fs_status.sh script
+  hosts: web
+  become: yes
+  tasks:
+    - name: Restart Postfix service
+      systemd:
+        name: postfix.service
+        state: restarted
+      become: yes
+
+    - name: Copy fs_status.sh script to managed host
+      copy:
+        src: /home/devops/Ansible-playbooks/Ansible-Projects/fs_status.sh
+        dest: /home/devops/fs_status.sh
+        mode: 0755  # Ensures script is executable
+
+    - name: Execute fs_status.sh script
+      command: /home/devops/fs_status.sh
